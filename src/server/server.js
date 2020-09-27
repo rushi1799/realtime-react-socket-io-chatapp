@@ -21,14 +21,12 @@ io.on("connection", (socket) => {
   console.log("a user connected");
 
   socket.on("new_visitor", (user) => {
-    console.log(`New visitor `, user);
     socket.user = user;
     emitVisitors();
   });
 
   socket.on("disconnect", () => {
     emitVisitors();
-    console.log(`user disconnected`);
   });
 });
 const port = 3000;
