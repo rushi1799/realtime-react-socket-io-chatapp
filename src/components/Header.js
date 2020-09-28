@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav } from "reactstrap";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+} from "reactstrap";
+import { NavLink, Link } from "react-router-dom";
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -8,10 +16,27 @@ const Header = (props) => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">Chat App</NavbarBrand>
+        <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+          Chat App
+        </Link>
+
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar />
+          <Nav className="mr-auto" navbar>
+            <NavItem>
+              <NavLink
+                to="/roomchat"
+                className="mx-md-5"
+                style={{ color: "inherit" }}>
+                RoomChat
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/livevisitors" style={{ color: "inherit" }}>
+                Online
+              </NavLink>
+            </NavItem>
+          </Nav>
         </Collapse>
       </Navbar>
     </div>

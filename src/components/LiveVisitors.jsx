@@ -1,9 +1,8 @@
-import Axios from "axios";
 import React, { Fragment, useState, useEffect } from "react";
 import openSocket from "socket.io-client";
 import axios from "axios";
 import { Table } from "reactstrap";
-const socket = openSocket("http://192.168.43.73:3000/");
+const socket = openSocket("http://localhost:3000/");
 const LiveVisitors = (props) => {
   const [visitors, setVisitors] = useState([]);
   useEffect(() => {
@@ -40,6 +39,7 @@ const LiveVisitors = (props) => {
         <td>
           <img
             src={`https://www.countryflags.io/${visitor.flag}/shiny/32.png`}
+            alt={visitor.flag}
           />
         </td>
         <td>{visitor.city}</td>

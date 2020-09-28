@@ -1,16 +1,12 @@
 import React from "react";
-import Header from "./components/Header";
-import LiveVisitors from "./components/LiveVisitors";
-import { Container, Row } from "reactstrap";
+import { BrowserRouter } from "react-router-dom";
+import Layout from "./components/Container/Layout";
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Container>
-        <Row>
-          <LiveVisitors />
-        </Row>
-      </Container>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
     </div>
   );
 }
