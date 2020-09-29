@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import Header from "../Header";
 import LiveVisitors from "../LiveVisitors";
 import PublicChat from "../PublicChat";
-import RoomChat from "../RoomChat";
+import RoomChat from "../roomchat/RoomChat";
 import { Container } from "reactstrap";
 const Layout = () => {
   return (

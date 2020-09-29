@@ -43,14 +43,20 @@ io.on("connection", (socket) => {
   });
 
   // room chat
-  socket.on("join_room", (room) => {
+  socket.on("join_room", ({ room, user }) => {
+    socket.user = user;
     socket.join(room);
+    var clients = io.sockets.adapter.rooms[room].sockets;
+    let keys = Object.keys(clients);
+    let users = [];
+    keys.map((key) => users.push(io.sockets.connected[key].user));
+    io.to(room).emit("online", users);
+    console.log(`${user} join the ${room} room`);
   });
-
-  socket.on("message", ({ room, message }) => {
+  socket.on("message", ({ room, message, name }) => {
     socket.to(room).emit("message", {
       message,
-      name: "friend",
+      name,
     });
   });
   socket.on("typing", ({ room }) => {

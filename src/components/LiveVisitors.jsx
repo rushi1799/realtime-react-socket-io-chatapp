@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
-import openSocket from "socket.io-client";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { SocketContext } from "../context/SocketContext";
 import { Table } from "reactstrap";
-const socket = openSocket("http://localhost:3000/");
 const LiveVisitors = (props) => {
   const [visitors, setVisitors] = useState([]);
+  const socket = useContext(SocketContext);
   useEffect(() => {
     axios.get("http://www.geoplugin.net/json.gp").then((res) => {
       const {

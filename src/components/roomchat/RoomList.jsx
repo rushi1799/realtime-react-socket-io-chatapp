@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import openSocket from "socket.io-client";
+import React, { useState, Fragment } from "react";
+
 import {
   Button,
   Form,
@@ -11,11 +11,11 @@ import {
   Col,
   Row,
 } from "reactstrap";
-const socket = openSocket("http://localhost:3000/");
 
-const RoomChat = () => {
+const RoomList = ({ setRoom, open }) => {
   const [rooms, setRooms] = useState(["java"]);
   const [formdata, setFormData] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setRooms([...rooms, formdata]);
@@ -23,13 +23,14 @@ const RoomChat = () => {
   };
   const joinRoom = (idx) => {
     let room = rooms[idx].toLowerCase();
+    setRoom(room);
+    open();
   };
-
   return (
     <Fragment>
-      <Row>
+      <Row className="mt-3">
         <Col xs="12">
-          <h1>Room Chat</h1>
+          <h2 className="diplay-4"> Room Chat</h2>
         </Col>
       </Row>
       <Row>
@@ -69,7 +70,7 @@ const RoomChat = () => {
                 onChange={(e) => setFormData(e.target.value)}
               />
             </FormGroup>
-            <Button color="primary" className="mx-3">
+            <Button color="primary" className="mx-2">
               Create room
             </Button>
           </Form>
@@ -79,4 +80,4 @@ const RoomChat = () => {
   );
 };
 
-export default RoomChat;
+export default RoomList;
