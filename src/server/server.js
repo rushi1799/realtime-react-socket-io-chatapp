@@ -42,17 +42,35 @@ io.on("connection", (socket) => {
     }
   });
 
+  //
+
   // room chat
+  // get room users
+  const emitRoomUsers = (room) => {
+    if (io.sockets.adapter.rooms[room] !== undefined) {
+      var clients = io.sockets.adapter.rooms[room].sockets;
+      let keys = Object.keys(clients);
+      let users = [];
+      keys.map((key) => users.push(io.sockets.connected[key].user));
+      io.to(room).emit("online", users);
+    }
+  };
+
+  //join room
   socket.on("join_room", ({ room, user }) => {
     socket.user = user;
     socket.join(room);
-    var clients = io.sockets.adapter.rooms[room].sockets;
-    let keys = Object.keys(clients);
-    let users = [];
-    keys.map((key) => users.push(io.sockets.connected[key].user));
-    io.to(room).emit("online", users);
+    emitRoomUsers(room);
     console.log(`${user} join the ${room} room`);
   });
+
+  // leave room
+
+  socket.on("leave_room", (room) => {
+    socket.leave(room);
+    emitRoomUsers(room);
+  });
+
   socket.on("message", ({ room, message, name }) => {
     socket.to(room).emit("message", {
       message,
