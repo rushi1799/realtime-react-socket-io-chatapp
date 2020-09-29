@@ -6,11 +6,11 @@ import Chat from "./Chat";
 const ChatBox = ({ room, open }) => {
   const socket = useContext(SocketContext);
   const [users, setUsers] = useState([]);
-  const [curruser, setUser] = useState("");
+  const [curuser, setUser] = useState("");
   let user;
 
   useEffect(() => {
-    user = "rushi"; //prompt("Enter your name..");
+    user = prompt("Enter your name..");
     setUser(user);
     socket.emit("join_room", { user, room });
     socket.on("online", (users) => {
@@ -19,7 +19,7 @@ const ChatBox = ({ room, open }) => {
   }, [user]);
 
   const handleLeave = () => {
-    socket.emit("leave_room", room);
+    socket.emit("leave_room", { room, curuser });
     open();
   };
 
@@ -31,10 +31,10 @@ const ChatBox = ({ room, open }) => {
         </Col>
       </Row>
       <Row className="mt-3 ">
-        <Col xs="9 d-flex justify-content-center">
-          <Chat />
+        <Col md="9 d-flex justify-content-center">
+          <Chat room={room} user={curuser} />
         </Col>
-        <Col xs="3">
+        <Col md="3">
           <div className="border border-primary rounded">
             <strong className="px-3 mt-2 ">Online User</strong>
             <ul className="border-top border-primary mt-2 pt-2">

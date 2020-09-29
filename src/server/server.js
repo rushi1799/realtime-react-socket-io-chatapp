@@ -1,7 +1,7 @@
 var app = require("express")();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
-
+const rooms = ["java"];
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
     if (user) {
       socket.broadcast.emit("server_message", {
         name: "App",
-        message: `${user.name} just left chat`,
+        message: `${user} just left chat`,
       });
       emitOnlineUsers();
     }
@@ -55,48 +55,75 @@ io.on("connection", (socket) => {
       io.to(room).emit("online", users);
     }
   };
+  //send rooms
+  const sendRooms = () => {
+    io.emit("rooms", rooms);
+  };
 
+  //manage rooms
+  socket.on("add_room", (room) => {
+    rooms.push(room);
+    sendRooms();
+  });
+  socket.on("rooms", () => {
+    socket.emit("rooms", rooms);
+  });
   //join room
   socket.on("join_room", ({ room, user }) => {
     socket.user = user;
     socket.join(room);
     emitRoomUsers(room);
+    socket.emit("server_message", {
+      name: "server",
+      message: "Welcome to room",
+    });
+    socket.to(room).broadcast.emit("server_message", {
+      name: "server",
+      message: `${user} just joined chat`,
+    });
     console.log(`${user} join the ${room} room`);
   });
 
   // leave room
 
-  socket.on("leave_room", (room) => {
+  socket.on("leave_room", ({ room, curuser }) => {
     socket.leave(room);
+    socket.to(room).broadcast.emit("server_message", {
+      name: "server",
+      message: `${curuser} just left the chat`,
+    });
     emitRoomUsers(room);
   });
+  //server message
 
-  socket.on("message", ({ room, message, name }) => {
-    socket.to(room).emit("message", {
+  socket.on("message", ({ room, message, user }) => {
+    io.to(room).emit("message", {
       message,
-      name,
+      name: user,
     });
   });
-  socket.on("typing", ({ room }) => {
-    socket.to(room).emit("typing", "Someone is typing...");
+
+  //typing event
+  socket.on("typing", ({ room, user }) => {
+    socket.to(room).emit("typing", `${user} is typing...`);
   });
   socket.on("stop_typing", ({ room }) => {
-    socket.to(room).emit("stop_typing");
+    socket.to(room).emit("stop_typing", "");
   });
 
   // add user to socket
-  socket.on("add_user", (user) => {
-    socket.emit("server_message", {
-      name: "App",
-      message: "Welcome to room",
-    });
-    socket.broadcast.emit("server_message", {
-      name: "App",
-      message: `${user.name} just joined chat`,
-    });
-    socket.user = user;
-    emitOnlineUsers();
-  });
+  // socket.on("add_user", (user) => {
+  //   socket.emit("server_message", {
+  //     name: "App",
+  //     message: "Welcome to room",
+  //   });
+  //   socket.broadcast.emit("server_message", {
+  //     name: "App",
+  //     message: `${user.name} just joined chat`,
+  //   });
+  //   socket.user = user;
+  //   emitOnlineUsers();
+  // });
 });
 const port = 3000;
 

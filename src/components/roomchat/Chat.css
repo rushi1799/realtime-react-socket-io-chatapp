@@ -80,3 +80,9 @@ textarea::-webkit-scrollbar-thumb {
   margin: 0;
   text-align: center;
 }
+
+@media only screen and (max-width: 1000px) {
+  .chat {
+    width: 100%;
+  }
+}

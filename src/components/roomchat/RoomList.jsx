@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from "react";
-
+import React, { useState, Fragment, useEffect, useContext } from "react";
+import { SocketContext } from "../../context/SocketContext";
 import {
   Button,
   Form,
@@ -13,12 +13,20 @@ import {
 } from "reactstrap";
 
 const RoomList = ({ setRoom, open }) => {
-  const [rooms, setRooms] = useState(["java"]);
+  const [rooms, setRooms] = useState([]);
   const [formdata, setFormData] = useState("");
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.emit("rooms");
+    socket.on("rooms", (rooms) => {
+      setRooms(rooms);
+    });
+  }, [socket]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setRooms([...rooms, formdata]);
+    socket.emit("add_room", formdata);
     setFormData("");
   };
   const joinRoom = (idx) => {

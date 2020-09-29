@@ -29,7 +29,7 @@ const LiveVisitors = (props) => {
         setVisitors(visitors);
       });
     });
-  }, []);
+  }, [socket]);
 
   const renderTableBody = () => {
     return visitors.map((visitor, idx) => (
