@@ -8,7 +8,7 @@ const RoomChat = () => {
   return (
     <Fragment>
       {open ? (
-        <ChatBox room={room} open={() => setOpen(!open)} />
+        <ChatBox room={room} open={() => setOpen(!open)} show={true} />
       ) : (
         <RoomList setRoom={setRoom} open={() => setOpen(!open)} />
       )}

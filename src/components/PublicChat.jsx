@@ -1,7 +1,7 @@
 import React from "react";
-
+import ChatBox from "./roomchat/ChatBox";
 const PublicChat = () => {
-  return <p>PublicChat</p>;
+  return <ChatBox show={false} room="public" />;
 };
 
 export default PublicChat;

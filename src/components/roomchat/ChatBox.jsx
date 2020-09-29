@@ -3,7 +3,7 @@ import { Col, Row, Button } from "reactstrap";
 import { SocketContext } from "../../context/SocketContext";
 import Chat from "./Chat";
 
-const ChatBox = ({ room, open }) => {
+const ChatBox = ({ room, open, show }) => {
   const socket = useContext(SocketContext);
   const [users, setUsers] = useState([]);
   const [curuser, setUser] = useState("");
@@ -45,11 +45,13 @@ const ChatBox = ({ room, open }) => {
                 </li>
               ))}
             </ul>
-            <div className="m-2 d-flex justify-content-end">
-              <Button color="danger" onClick={handleLeave}>
-                Leave Room
-              </Button>
-            </div>
+            {show && (
+              <div className="m-2 d-flex justify-content-end">
+                <Button color="danger" onClick={handleLeave}>
+                  Leave Room
+                </Button>
+              </div>
+            )}
           </div>
         </Col>
       </Row>
